@@ -1,0 +1,66 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #d64161;
+}
+
+#book-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+
+}
+
+#submit {
+  padding: 5px;
+  background-color: teal;
+  color: bisque;
+  width: 100px;
+  font-size: large;
+}
+
+#add-book-form {
+  display: none;
+  text-align: center;
+  width: 200px;
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border: red 2px solid;
+  transition: 0.3s;
+  padding: 20px;
+  position: relative;
+  bottom: 20px;
+}
+
+#add-book-button {
+  background-color: #feb236;
+  color: black;
+  width: 120px;
+  height: 60px;;
+  text-align: center;
+}
+
+#add-book-form {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.book {
+  padding: 20px 16px;
+  margin: 20px;
+  color: yellow;
+  font-size: 30px;
+  width: 250px;
+  height: 200px;
+  border: red 4px solid;
+  background-color: #ff7b25;
+
+}
+
+.remove-button {
+  height: 40px;
+  width: 70px;
+}

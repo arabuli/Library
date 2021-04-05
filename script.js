@@ -35,24 +35,10 @@ function addBookToLibrary(title, author, pages, status) {
   myLibrary.push(newBook);
 }
 
-addBookToLibrary("The Hobbit", "J. R. R. Tolkien", 310, true);
-addBookToLibrary("დათა თუთაშხია", "ჭაბუა ამირეჯიბი", 730, false);
-addBookToLibrary("ბეჭდების მბრძანებელი", "ტოლკინი", 1216, true);
-addBookToLibrary("Hobbit", "Tolkien", 333, true);
-addBookToLibrary("Wisgni", "Me", 123, false);
-addBookToLibrary("Hobbit", "Tolkien", 333, true);
-addBookToLibrary("Wisgni", "Me", 123, false);
-addBookToLibrary("Hobbit", "Tolkien", 333, true);
-addBookToLibrary("Wisgni", "Me", 123, false);
-
 const bookForm = document.getElementById("add-book-form");
 const addButton = document.getElementById("add-book-button");
 addButton.addEventListener("click", function () {
-  if (bookForm.style.display == "block") {
-    bookForm.style.display = "none";
-  } else {
-    bookForm.style.display = "block";
-  }
+  bookForm.classList.toggle("show");
 });
 
 function getFormInfo() {
@@ -98,7 +84,7 @@ function displayBooks() {
     title.textContent = `Title: ${bookTitle}`;
     author.textContent = `Author: ${bookAuthor}`;
     pages.textContent = `Pages: ${bookPages}`;
-    status.textContent = `Read?: ${bookStatus}`;
+    status.textContent = `Read?: `;
     labelElement.classList.add("switch");
     span.classList.add("slider", "round");
     book.classList.add("book");

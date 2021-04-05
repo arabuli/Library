@@ -50,7 +50,7 @@ closeButton.textContent="x";
 bookForm.appendChild(closeButton);
 closeButton.classList.add("remove-button");
 closeButton.setAttribute("type", "button");
-bookForm.addEventListener("click", function() {
+closeButton.addEventListener("click", function() {
   bookForm.style.visibility = "hidden";
 });
 

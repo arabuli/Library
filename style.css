@@ -9,25 +9,24 @@ body {
   font-family: 'New Tegomin', serif;
 }
 
-p { color: #333333; 
-  font-family: "Helvetica Neue",Arial,sans-serif; font-size: 16px; font-weight: 300; line-height: 1.5625; margin-bottom: 15px; }
-
-.container {
-  height: 50%;
-  position: relative;
+p { 
+  color: #333333; 
+  font-family: "Helvetica Neue",Arial,sans-serif; 
+  font-size: 16px; 
+  font-weight: 300; 
+  line-height: 1.5625; 
+  margin-bottom: 15px; 
 }
+
 
 #book-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 2fr));
   background-color: #1C3144;
-  background-size: auto;
-  align-items: center;
+  justify-content: center;
   grid-gap: .5rem;
-  height: 600px;
   grid-template-rows: auto;
   padding: 2px 16px;
-  z-index: 2;
 }
 
 #submit {
@@ -39,7 +38,7 @@ p { color: #333333;
 }
 
 #add-book-form {
-  visibility: visible;
+  visibility: hidden;
   text-align: center;
   width: 200px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
@@ -52,11 +51,10 @@ p { color: #333333;
   border: red 2px solid;
   transition: 0.3s;
   padding: 20px;
-  position: relative;
-  z-index: 5;
+  position: absolute;
   bottom: 20px;
-  bottom: 125%;
   left: 50%;
+  z-index: 2;
   margin-left: -80px;
 }
 
@@ -72,13 +70,6 @@ p { color: #333333;
   border-color: #555 transparent transparent transparent;
 }
 
-.show {
-  visibility: visible;
-  background-color: red;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s;
-  z-index: 5;
-}
 
 /* Add animation (fade in the popup) */
 @-webkit-keyframes fadeIn {

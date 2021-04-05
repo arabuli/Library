@@ -38,7 +38,20 @@ function addBookToLibrary(title, author, pages, status) {
 const bookForm = document.getElementById("add-book-form");
 const addButton = document.getElementById("add-book-button");
 addButton.addEventListener("click", function () {
-  bookForm.classList.toggle("show");
+  if(bookForm.style.visibility == "visible") {
+    bookForm.style.visibility = "hidden";
+  } else {
+    bookForm.style.visibility = "visible";
+  }
+});
+
+let closeButton = document.createElement("button");
+closeButton.textContent="x";
+bookForm.appendChild(closeButton);
+closeButton.classList.add("remove-button");
+closeButton.setAttribute("type", "button");
+bookForm.addEventListener("click", function() {
+  bookForm.style.visibility = "hidden";
 });
 
 function getFormInfo() {
@@ -58,7 +71,7 @@ function getFormInfo() {
 const submitButton = document.getElementById("submit");
 submitButton.addEventListener("click", function () {
   getFormInfo();
-  bookForm.style.display = "none";
+  bookForm.style.visibility = "hidden";
   populateStorage();
   displayBooks();
 });

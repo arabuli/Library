@@ -59,8 +59,7 @@ function getFormInfo() {
   author = bookForm[1].value;
   pages = bookForm[2].value;
   console.log(pages);
-  let getStatus = document.getElementById("status");
-  if (getStatus.checked) {
+  if (document.getElementById("status").checked) {
     status = true;
   } else {
     status = false;
@@ -86,6 +85,7 @@ function displayBooks() {
     let bookAuthor = myLibrary[i].author;
     let bookPages = myLibrary[i].pages;
     let bookStatus = myLibrary[i].status;
+    console.log(bookStatus);
     let title = document.createElement("p");
     let author = document.createElement("p");
     let pages = document.createElement("p");
@@ -104,27 +104,23 @@ function displayBooks() {
     status.style.display = "inline-block";
     removeButton.classList.add("remove-button");
     checkbox.setAttribute("type", "checkbox");
-    if (myLibrary[i].status == true) {
-      checkbox.setAttribute("checked", true);
+    if (bookStatus == "true") {
+      checkbox.setAttribute("checked", "true");
     }
-
-
-    docRef.doc(`${bookTitle}`).set({
-        title: bookTitle,
-        author: bookAuthor,
-        pages: bookPages,
-        status: bookStatus,
-      }).then(function (docRef) {
-        console.log("Document successfully written!");
-      })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
-      });
-
-
-
+    // docRef.doc(`${bookTitle}`).set({
+    //     title: bookTitle,
+    //     author: bookAuthor,
+    //     pages: bookPages,
+    //     status: bookStatus,
+    //   }).then(function (docRef) {
+    //     console.log("Document successfully written!");
+    //   })
+    //   .catch(function (error) {
+    //     console.error("Error adding document: ", error);
+    //   });
 
     labelElement.appendChild(checkbox);
+
     labelElement.appendChild(span);
     book.appendChild(title);
     book.appendChild(author);
@@ -134,16 +130,17 @@ function displayBooks() {
     bookContainer.appendChild(book);
     checkbox.addEventListener("click", function () {
       if (checkbox.checked) {
-        myLibrary[i].status = true;
-        docRef.doc(`${bookTitle}`).update({
-          status: myLibrary[i].status
-        });
+        myLibrary[i].status = "true";
+        // docRef.doc(`${bookTitle}`).update({
+        //   status: myLibrary[i].status
+        // });
         displayBooks();
         populateStorage();
       } else {
-        myLibrary[i].status = false;
+        myLibrary[i].status = "false";
         displayBooks();
         populateStorage();
+        console.log(myLibrary);
       }
     })
     removeButton.textContent = "x";
@@ -152,7 +149,7 @@ function displayBooks() {
       myLibrary.splice(i, 1);
       displayBooks();
       populateStorage();
-      docRef.doc(`${bookTitle}`).delete();
+      // docRef.doc(`${bookTitle}`).delete();
     });
   }
 }

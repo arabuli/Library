@@ -23,10 +23,10 @@ p {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 2fr));
   background-color: #1C3144;
-  justify-content: center;
   grid-gap: .5rem;
   grid-template-rows: auto;
   padding: 2px 16px;
+  width: 100%;
 }
 
 #submit {
@@ -51,8 +51,8 @@ p {
   border: red 2px solid;
   transition: 0.3s;
   padding: 20px;
+  top: 10%;
   position: absolute;
-  bottom: 50%;
   left: 50%;
   z-index: 2;
   margin-left: -80px;

@@ -1,10 +1,26 @@
 let myLibrary = [];
 
+var firebaseConfig = {
+  apiKey: "AIzaSyAzL-LJB8ifDZzO_7u3eUleFp4A4EeMzU8",
+  authDomain: "library-ea17e.firebaseapp.com",
+  databaseURL: "https://library-ea17e-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "library-ea17e",
+  storageBucket: "library-ea17e.appspot.com",
+  messagingSenderId: "184578746713",
+  appId: "1:184578746713:web:47e01d3d1a2b4a625cc448"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+let firestore = firebase.firestore();
+const docRef = firestore.collection('books');
+
+
 function Book(title, author, pages, status) {
   this.title = title,
-  this.author = author,
-  this.pages = pages,
-  this.status = status
+    this.author = author,
+    this.pages = pages,
+    this.status = status
   this.info = function () {
     if (status == true) {
       return `${title} ${author} ${pages} ${status}`
@@ -21,7 +37,7 @@ function addBookToLibrary(title, author, pages, status) {
 
 addBookToLibrary("The Hobbit", "J. R. R. Tolkien", 310, true);
 addBookToLibrary("დათა თუთაშხია", "ჭაბუა ამირეჯიბი", 730, false);
-addBookToLibrary("ბეჭდების მბრძანებელი", "ტოლკინი", 1216 , true);
+addBookToLibrary("ბეჭდების მბრძანებელი", "ტოლკინი", 1216, true);
 addBookToLibrary("Hobbit", "Tolkien", 333, true);
 addBookToLibrary("Wisgni", "Me", 123, false);
 addBookToLibrary("Hobbit", "Tolkien", 333, true);
@@ -89,9 +105,25 @@ function displayBooks() {
     status.style.display = "inline-block";
     removeButton.classList.add("remove-button");
     checkbox.setAttribute("type", "checkbox");
-    if(myLibrary[i].status == true) {
+    if (myLibrary[i].status == true) {
       checkbox.setAttribute("checked", true);
     }
+
+
+    docRef.doc(`${bookTitle}`).set({
+        title: bookTitle,
+        author: bookAuthor,
+        pages: bookPages,
+        status: bookStatus,
+      }).then(function (docRef) {
+        console.log("Document successfully written!");
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
+
+
+
 
     labelElement.appendChild(checkbox);
     labelElement.appendChild(span);
@@ -101,9 +133,12 @@ function displayBooks() {
     book.appendChild(status);
     book.appendChild(labelElement);
     bookContainer.appendChild(book);
-    checkbox.addEventListener("click", function() {
+    checkbox.addEventListener("click", function () {
       if (checkbox.checked) {
         myLibrary[i].status = true;
+        docRef.doc(`${bookTitle}`).update({
+          status: myLibrary[i].status
+        });
         displayBooks();
         populateStorage();
       } else {
@@ -118,6 +153,7 @@ function displayBooks() {
       myLibrary.splice(i, 1);
       displayBooks();
       populateStorage();
+      docRef.doc(`${bookTitle}`).delete();
     });
   }
 }
@@ -128,7 +164,7 @@ function populateStorage() {
 
 
 function getStorage() {
-  if(!localStorage.myLibrary) {
+  if (!localStorage.myLibrary) {
     displayBooks();
   } else {
     let objects = localStorage.getItem("myLibrary");

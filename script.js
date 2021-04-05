@@ -1,29 +1,27 @@
 let myLibrary = [];
 
-function Book(title, author, pages, read) {
-  this.title = title
-  this.author = author
-  this.pages = pages
-  this.read = read
+function Book(title, author, pages, status) {
+  this.title = title,
+  this.author = author,
+  this.pages = pages,
+  this.status = status
   this.info = function () {
-    if (read == true) {
-      return `${title} ${author} ${pages} read`
+    if (status == true) {
+      return `${title} ${author} ${pages} ${status}`
     } else {
-      return `${title} ${author} ${pages} notread`
+      return `${title} ${author} ${pages} ${status}`
     }
   }
 }
 
-function addBookToLibrary(title, author, pages, read) {
-  let newBook = new Book(title, author, pages, read);
+function addBookToLibrary(title, author, pages, status) {
+  let newBook = new Book(title, author, pages, status);
   myLibrary.push(newBook);
 }
 
-
-addBookToLibrary("Hobbit", "Tolkien", 333, true);
-addBookToLibrary("Wisgni", "Me", 123, false);
-addBookToLibrary("Hobbit", "Tolkien", 333, true);
-addBookToLibrary("Wisgni", "Me", 123, false);
+addBookToLibrary("The Hobbit", "J. R. R. Tolkien", 310, true);
+addBookToLibrary("დათა თუთაშხია", "ჭაბუა ამირეჯიბი", 730, false);
+addBookToLibrary("ბეჭდების მბრძანებელი", "ტოლკინი", 1216 , true);
 addBookToLibrary("Hobbit", "Tolkien", 333, true);
 addBookToLibrary("Wisgni", "Me", 123, false);
 addBookToLibrary("Hobbit", "Tolkien", 333, true);
@@ -33,8 +31,8 @@ addBookToLibrary("Wisgni", "Me", 123, false);
 
 const bookForm = document.getElementById("add-book-form");
 const addButton = document.getElementById("add-book-button");
-addButton.addEventListener("click", function() {
-  if(bookForm.style.display == "block") {
+addButton.addEventListener("click", function () {
+  if (bookForm.style.display == "block") {
     bookForm.style.display = "none";
   } else {
     bookForm.style.display = "block";
@@ -45,54 +43,100 @@ function getFormInfo() {
   title = bookForm[0].value;
   author = bookForm[1].value;
   pages = bookForm[2].value;
-  if (document.getElementById("read").checked) {
-    read = true;
+  console.log(pages);
+  let getStatus = document.getElementById("status");
+  if (getStatus.checked) {
+    status = true;
   } else {
-    read = false;
+    status = false;
   }
-  addBookToLibrary(title, author, pages, read);
+  addBookToLibrary(title, author, pages, status);
 }
 
 const submitButton = document.getElementById("submit");
 submitButton.addEventListener("click", function () {
   getFormInfo();
   bookForm.style.display = "none";
+  populateStorage();
   displayBooks();
 });
 
 function displayBooks() {
-  const selectBookPlace = document.getElementById("book-container");
-  selectBookPlace.innerHTML = "";
+  const bookContainer = document.getElementById("book-container");
+  bookContainer.innerHTML = "";
   for (let i = 0; i < myLibrary.length; i++) {
-    let bookTitle = myLibrary[i].info().split(" ")[0];
-    let bookAuthor = myLibrary[i].info().split(" ")[1];
-    let bookPages = myLibrary[i].info().split(" ")[2];
-    let bookStatus = myLibrary[i].info().split(" ")[3];
     let book = document.createElement("div");
+    let removeButton = document.createElement("button");
+    let bookTitle = myLibrary[i].title;
+    let bookAuthor = myLibrary[i].author;
+    let bookPages = myLibrary[i].pages;
+    let bookStatus = myLibrary[i].status;
     let title = document.createElement("p");
     let author = document.createElement("p");
     let pages = document.createElement("p");
-    let read = document.createElement("p");
+    let status = document.createElement("p");
+    let labelElement = document.createElement("LABEL");
+    let checkbox = document.createElement("INPUT");
+    checkbox.setAttribute("id", "read-checkbox");
+    let span = document.createElement("SPAN");
     title.textContent = `Title: ${bookTitle}`;
     author.textContent = `Author: ${bookAuthor}`;
     pages.textContent = `Pages: ${bookPages}`;
-    read.textContent = `Status: ${bookStatus}`;
+    status.textContent = `Read?: ${bookStatus}`;
+    labelElement.classList.add("switch");
+    span.classList.add("slider", "round");
+    book.classList.add("book");
+    status.style.display = "inline-block";
+    removeButton.classList.add("remove-button");
+    checkbox.setAttribute("type", "checkbox");
+    if(myLibrary[i].status == true) {
+      checkbox.setAttribute("checked", true);
+    }
+
+    labelElement.appendChild(checkbox);
+    labelElement.appendChild(span);
     book.appendChild(title);
     book.appendChild(author);
     book.appendChild(pages);
-    book.appendChild(read);
-    book.classList.add("book");
-    selectBookPlace.appendChild(book);
-    let removeButton = document.createElement("button");
+    book.appendChild(status);
+    book.appendChild(labelElement);
+    bookContainer.appendChild(book);
+    checkbox.addEventListener("click", function() {
+      if (checkbox.checked) {
+        myLibrary[i].status = true;
+        displayBooks();
+        populateStorage();
+      } else {
+        myLibrary[i].status = false;
+        displayBooks();
+        populateStorage();
+      }
+    })
     removeButton.textContent = "x";
-    removeButton.classList.add("remove-button");
     book.appendChild(removeButton);
-    removeButton.addEventListener("click", function() {
+    removeButton.addEventListener("click", function () {
       myLibrary.splice(i, 1);
       displayBooks();
+      populateStorage();
     });
   }
 }
 
-displayBooks();
+function populateStorage() {
+  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+}
 
+
+function getStorage() {
+  if(!localStorage.myLibrary) {
+    displayBooks();
+  } else {
+    let objects = localStorage.getItem("myLibrary");
+    objects = JSON.parse(objects);
+    myLibrary = objects;
+    displayBooks();
+  }
+}
+
+
+getStorage();

@@ -58,7 +58,6 @@ function getFormInfo() {
   title = bookForm[0].value;
   author = bookForm[1].value;
   pages = bookForm[2].value;
-  console.log(pages);
   if (document.getElementById("status").checked) {
     status = true;
   } else {

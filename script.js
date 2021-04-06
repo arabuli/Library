@@ -85,7 +85,6 @@ function displayBooks() {
     let bookAuthor = myLibrary[i].author;
     let bookPages = myLibrary[i].pages;
     let bookStatus = myLibrary[i].status;
-    console.log(bookStatus);
     let title = document.createElement("p");
     let author = document.createElement("p");
     let pages = document.createElement("p");
@@ -140,7 +139,6 @@ function displayBooks() {
         myLibrary[i].status = "false";
         displayBooks();
         populateStorage();
-        console.log(myLibrary);
       }
     })
     removeButton.textContent = "x";

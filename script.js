@@ -83,12 +83,7 @@ submitButton.addEventListener("click", function () {
   displayBooks();
 });
 
-
-
-
-
-
-function displayBooks(title, author, pages, status) {
+function displayBooks() {
   const bookContainer = document.getElementById("book-container");
   bookContainer.innerHTML = "";
   for (let i = 0; i < myLibrary.length; i++) {

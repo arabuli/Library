@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>LIBRARY</title>
+  <title>Library</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
@@ -12,23 +12,27 @@
   <link href="https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
-  <link rel="shortcute icon" type="image/png" href="img/icons8-book-64.png">
+  <link rel="shortcute icon" type="image/png" href="img/favicon.png">
 </head>
 
 <body>
   <div class="container">
-    <button id="add-book-button">ADD BOOK</button>
+    <button id="add-book-button">New Book</button>
     <form id="add-book-form" name="book-form">
       <label for="title">Title:</label><br>
-      <input type="text" id="title" name="title" value="ბიბლია"><br>
+      <input type="text" id="title" name="title" value="ბეჭდების მბრძანებელი I"><br>
       <label for="author">Author:</label><br>
-      <input type="text" id="author" name="author" value="უცნობი"><br>
+      <input type="text" id="author" name="author" value="ჯ.რ.რ. ტოლკინი"><br>
       <label for="pages">Pages:</label><br>
-      <input type="number" id="pages" name="pages" value="2854"><br>
+      <input type="number" id="pages" name="pages" value="370"><br>
       <label for="read">Already Read?</label>
-      <input type="checkbox" id="status" name="status"><br><br>
+      <input type="checkbox" id="status" name="status" checked><br><br>
       <input type="button" id="submit" value="Submit"><br>
+      <span class="material-icons-outlined">
+        home
+        </span>
     </form>
+
     <div id="book-container">
     </div>
 
@@ -37,7 +41,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-firestore.js"></script>
   <script src="script.js" async defer></script>
-  
+
   <script>
 </script>
 </body>

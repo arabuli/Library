@@ -1,4 +1,4 @@
-let myLibrary = [];
+"use strict"
 
 var firebaseConfig = {
   apiKey: "AIzaSyAzL-LJB8ifDZzO_7u3eUleFp4A4EeMzU8",
@@ -13,52 +13,60 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 let firestore = firebase.firestore();
-const docRef = firestore.collection('books');
+const docRef = firestore.collection('books')
+
+firestore.collection("books").get().then((snapshot) => {
+  snapshot.docs.forEach(doc => {
+    myLibrary.push(doc.data());
+    displayBooks();
+  })
+})
 
 
-function Book(title, author, pages, status) {
-  this.title = title,
-    this.author = author,
-    this.pages = pages,
-    this.status = status
-  this.info = function () {
-    if (status == true) {
-      return `${title} ${author} ${pages} ${status}`
-    } else {
-      return `${title} ${author} ${pages} ${status}`
-    }
+
+
+// Class Constructor to create new books and return their infos
+class Book {
+  constructor(title, author, pages, status) {
+    this.title = title,
+      this.author = author,
+      this.pages = pages,
+      this.status = status;
   }
-}
+};
+
+let myLibrary = [];
 
 function addBookToLibrary(title, author, pages, status) {
   let newBook = new Book(title, author, pages, status);
   myLibrary.push(newBook);
 }
 
-const bookForm = document.getElementById("add-book-form");
-const addButton = document.getElementById("add-book-button");
-addButton.addEventListener("click", function () {
-  if(bookForm.style.visibility == "visible") {
-    bookForm.style.visibility = "hidden";
+// Create form to add new Books and get info from them.
+const newBookButton = document.getElementById("add-book-button");
+const newBookForm = document.getElementById("add-book-form");
+const formCloseButton = document.createElement("button");
+
+newBookForm.appendChild(formCloseButton);
+formCloseButton.textContent = "x";
+formCloseButton.classList.add("remove-button");
+formCloseButton.setAttribute("type", "button");
+formCloseButton.addEventListener("click", function () {
+  newBookForm.style.visibility = "hidden";
+});
+
+newBookButton.addEventListener("click", function () {
+  if (newBookForm.style.visibility == "visible") {
+    newBookForm.style.visibility = "hidden";
   } else {
-    bookForm.style.visibility = "visible";
+    newBookForm.style.visibility = "visible";
   }
 });
 
-let closeButton = document.createElement("button");
-closeButton.textContent="x";
-bookForm.appendChild(closeButton);
-closeButton.classList.add("remove-button");
-closeButton.setAttribute("type", "button");
-closeButton.addEventListener("click", function() {
-  bookForm.style.visibility = "hidden";
-});
-
 function getFormInfo() {
-  title = bookForm[0].value;
-  author = bookForm[1].value;
-  pages = bookForm[2].value;
-  console.log(pages);
+  let title = newBookForm[0].value;
+  let author = newBookForm[1].value;
+  let pages = newBookForm[2].value;
   if (document.getElementById("status").checked) {
     status = true;
   } else {
@@ -70,34 +78,42 @@ function getFormInfo() {
 const submitButton = document.getElementById("submit");
 submitButton.addEventListener("click", function () {
   getFormInfo();
-  bookForm.style.visibility = "hidden";
-  populateStorage();
+  newBookForm.style.visibility = "hidden";
+  // populateStorage();
   displayBooks();
 });
 
-function displayBooks() {
+
+
+
+
+
+function displayBooks(title, author, pages, status) {
   const bookContainer = document.getElementById("book-container");
   bookContainer.innerHTML = "";
   for (let i = 0; i < myLibrary.length; i++) {
+    // Create necessery html elements to display single Book;
     let book = document.createElement("div");
     let removeButton = document.createElement("button");
     let bookTitle = myLibrary[i].title;
     let bookAuthor = myLibrary[i].author;
     let bookPages = myLibrary[i].pages;
     let bookStatus = myLibrary[i].status;
-    console.log(bookStatus);
     let title = document.createElement("p");
     let author = document.createElement("p");
     let pages = document.createElement("p");
     let status = document.createElement("p");
-    let labelElement = document.createElement("LABEL");
-    let checkbox = document.createElement("INPUT");
+    let labelElement = document.createElement("label");
+    let checkbox = document.createElement("input");
     checkbox.setAttribute("id", "read-checkbox");
-    let span = document.createElement("SPAN");
+    let span = document.createElement("span");
+
     title.textContent = `Title: ${bookTitle}`;
     author.textContent = `Author: ${bookAuthor}`;
     pages.textContent = `Pages: ${bookPages}`;
     status.textContent = `Read?: `;
+
+    // Add customization to html elements
     labelElement.classList.add("switch");
     span.classList.add("slider", "round");
     book.classList.add("book");
@@ -107,20 +123,19 @@ function displayBooks() {
     if (bookStatus == "true") {
       checkbox.setAttribute("checked", "true");
     }
-    // docRef.doc(`${bookTitle}`).set({
-    //     title: bookTitle,
-    //     author: bookAuthor,
-    //     pages: bookPages,
-    //     status: bookStatus,
-    //   }).then(function (docRef) {
-    //     console.log("Document successfully written!");
-    //   })
-    //   .catch(function (error) {
-    //     console.error("Error adding document: ", error);
-    //   });
+    docRef.doc(`${bookTitle}`).set({
+        title: bookTitle,
+        author: bookAuthor,
+        pages: bookPages,
+        status: bookStatus,
+      }).then(function (docRef) {
+        console.log("Document successfully written!");
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
 
     labelElement.appendChild(checkbox);
-
     labelElement.appendChild(span);
     book.appendChild(title);
     book.appendChild(author);
@@ -128,47 +143,56 @@ function displayBooks() {
     book.appendChild(status);
     book.appendChild(labelElement);
     bookContainer.appendChild(book);
+    removeButton.textContent = "x";
+    book.appendChild(removeButton);
+
     checkbox.addEventListener("click", function () {
       if (checkbox.checked) {
         myLibrary[i].status = "true";
-        // docRef.doc(`${bookTitle}`).update({
-        //   status: myLibrary[i].status
-        // });
+        docRef.doc(`${bookTitle}`).update({
+          status: myLibrary[i].status
+        });
         displayBooks();
-        populateStorage();
+        // populateStorage();
       } else {
         myLibrary[i].status = "false";
         displayBooks();
-        populateStorage();
+        // populateStorage();
         console.log(myLibrary);
       }
     })
-    removeButton.textContent = "x";
-    book.appendChild(removeButton);
+
     removeButton.addEventListener("click", function () {
       myLibrary.splice(i, 1);
       displayBooks();
-      populateStorage();
-      // docRef.doc(`${bookTitle}`).delete();
+      // populateStorage();
+      docRef.doc(`${bookTitle}`).delete();
     });
   }
 }
 
-function populateStorage() {
-  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
-}
+// function populateStorage() {
+//   localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+// }
 
 
-function getStorage() {
-  if (!localStorage.myLibrary) {
-    displayBooks();
-  } else {
-    let objects = localStorage.getItem("myLibrary");
-    objects = JSON.parse(objects);
-    myLibrary = objects;
-    displayBooks();
-  }
-}
+// function getStorage() {
+//   if (!localStorage.myLibrary) {
+//     displayBooks();
+//   } else {
+//     let objects = localStorage.getItem("myLibrary");
+//     objects = JSON.parse(objects);
+//     console.log
+//     myLibrary = objects;
+//     console.log(myLibrary);
+//     displayBooks();
+//   }
+// }
+
+displayBooks();
 
 
-getStorage();
+
+
+
+// getStorage();
